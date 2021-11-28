@@ -5,8 +5,9 @@ import { Wallet } from "../../../../interfaces/models/wallet"
 import { actions, selectors } from "../../../../redux/features/categories"
 import { useAppDispatch } from "../../../../redux/store"
 import CategoryModal from "./modal"
-import { Card } from "../../../../components"
+import { Card, CategoryIcon } from "../../../../components"
 import { Category } from "../../../../interfaces/models/category"
+import Color from "color"
 
 export default () => {
 	const toast = useToast()
@@ -53,10 +54,10 @@ export default () => {
 						</Thead>
 						<Tbody>
 							{categories.map((category) => (
-								<Tr>
+								<Tr key={category.id}>
 									<Td>
 										<Flex alignItems="center">
-											{/* <Avatar name={category.name} src={category.icon_url} size="sm" mr="2" /> */}
+											<CategoryIcon colorHex={category.color_hex} iconFa={category.icon_fa} mr="2" />
 											<Box>{category.name}</Box>
 										</Flex>
 									</Td>
@@ -65,7 +66,6 @@ export default () => {
 											<MenuButton as={IconButton} size="sm" aria-label="Options" icon={<i className="far fa-ellipsis-h"></i>}></MenuButton>
 											<MenuList>
 												<MenuItem icon={<Center w="20px"><i className="far fa-pen"></i></Center>} onClick={onEditCategoryClick.bind(null, category)}>Edit</MenuItem>
-												<MenuItem icon={<Center w="20px"><i className="far fa-archive"></i></Center>}>Archive</MenuItem>
 												<MenuItem icon={<Center w="20px"><i className="far fa-trash"></i></Center>} onClick={onDeleteCategoryClick.bind(null, category)}>Delete</MenuItem>
 											</MenuList>
 										</Menu>

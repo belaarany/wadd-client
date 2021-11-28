@@ -8,19 +8,23 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@apollo/client": "^3.5.5",
     "@chakra-ui/icons": "^1.1.1",
     "@chakra-ui/react": "^1.7.2",
     "@emotion/react": "^11.6.0",
     "@emotion/styled": "^11.6.0",
     "@reduxjs/toolkit": "^1.6.2",
+    "color": "^4.0.2",
     "firebase": "^9.5.0",
     "framer-motion": "^4.1.17",
+    "graphql": "^16.0.1",
     "lodash": "^4.17.21",
     "next": "12.0.4",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.20.2",
     "react-redux": "^7.2.6",
+    "realm-web": "^1.5.1",
     "sass": "^1.43.4"
   },
   "devDependencies": {

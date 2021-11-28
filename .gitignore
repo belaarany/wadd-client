@@ -1,5 +1,14 @@
-# Created by https://www.toptal.com/developers/gitignore/api/react
-# Edit at https://www.toptal.com/developers/gitignore?templates=react
+# Created by https://www.toptal.com/developers/gitignore/api/react,nextjs,dotenv
+# Edit at https://www.toptal.com/developers/gitignore?templates=react,nextjs,dotenv
+
+### dotenv ###
+.env
+.env.*
+!.env.example
+
+### NextJS ###
+# Next build dir
+.next/
 
 ### react ###
 .DS_*
@@ -17,14 +26,4 @@ psd
 thumb
 sketch
 
-# End of https://www.toptal.com/developers/gitignore/api/react
-
-
-# Created by https://www.toptal.com/developers/gitignore/api/nextjs
-# Edit at https://www.toptal.com/developers/gitignore?templates=nextjs
-
-### NextJS ###
-# Next build dir
-.next/
-
-# End of https://www.toptal.com/developers/gitignore/api/nextjs
+# End of https://www.toptal.com/developers/gitignore/api/react,nextjs,dotenv

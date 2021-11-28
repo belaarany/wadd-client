@@ -14,10 +14,6 @@ export default () => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [editWallet, setEditWallet] = useState(null)
 
-	useEffect(() => {
-		dispatch(actions.getAll())
-	}, [])
-
 	const onAddWalletClick = () => {
 		setEditWallet(null)
 		onOpen()
@@ -55,7 +51,7 @@ export default () => {
 						</Thead>
 						<Tbody>
 							{wallets.map((wallet) => (
-								<Tr>
+								<Tr key={wallet.id}>
 									<Td>
 										<Flex alignItems="center">
 											<Avatar name={wallet.name} src={wallet.icon_url} size="sm" mr="2" />
@@ -70,7 +66,6 @@ export default () => {
 											<MenuButton as={IconButton} size="sm" aria-label="Options" icon={<i className="far fa-ellipsis-h"></i>}></MenuButton>
 											<MenuList>
 												<MenuItem icon={<Center w="20px"><i className="far fa-pen"></i></Center>} onClick={onEditWalletClick.bind(null, wallet)}>Edit</MenuItem>
-												<MenuItem icon={<Center w="20px"><i className="far fa-archive"></i></Center>}>Archive</MenuItem>
 												<MenuItem icon={<Center w="20px"><i className="far fa-trash"></i></Center>} onClick={onDeleteWalletClick.bind(null, wallet)}>Delete</MenuItem>
 											</MenuList>
 										</Menu>

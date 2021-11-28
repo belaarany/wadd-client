@@ -1,6 +1,6 @@
-import { Category } from "../../interfaces/models/category"
-import { Wallet } from "../../interfaces/models/wallet"
-import { databaseStrategy } from "../firebase/strategies/strategy"
+import { Category } from "../../../interfaces/models/category"
+import { Wallet } from "../../../interfaces/models/wallet"
+import { databaseStrategy } from "./_strategies"
 
 export const getAll = async (): Promise<any> => {
 	try {

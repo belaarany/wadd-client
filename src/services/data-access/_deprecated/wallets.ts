@@ -1,5 +1,11 @@
-import { Wallet } from "../../interfaces/models/wallet"
-import { databaseStrategy } from "../firebase/strategies/strategy"
+import { Wallet } from "../../../interfaces/models/wallet"
+import { databaseStrategy } from "./_strategies"
+
+export default () => {
+	return {
+
+	}
+}
 
 export const getAll = async (): Promise<any> => {
 	try {

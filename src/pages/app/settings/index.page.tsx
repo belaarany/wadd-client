@@ -6,9 +6,9 @@ import CategoriesTab from "./categories"
 export default () => {
 	return (
 		<React.Fragment>
-			<Heading mb="4">Settings</Heading>
+			<Heading size="lg" mb="6">Settings</Heading>
 
-			<Tabs colorScheme="brand">
+			<Tabs colorScheme="brand" defaultIndex={0}>
 				<TabList mb="4">
 					<Tab>Wallets</Tab>
 					<Tab>Categories</Tab>

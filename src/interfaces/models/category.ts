@@ -4,8 +4,12 @@ export type Category = {
 	owner_user_id: string
 	parent_category_id: string | null
 	name: string
+	color_hex: string
+	icon_fa: string
 	is_deleted: boolean
+	is_archived: boolean
 	created_at: string
 	updated_at: string
+	archived_at: string
 	deleted_at: string
 }

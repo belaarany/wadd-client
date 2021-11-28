@@ -1,6 +1,4 @@
-import { getDatabase, ref, onValue, child, get } from "firebase/database"
 import { initializeApp } from "firebase/app"
-import { realtimeDatabaseStrategy } from "./strategies/realtimeDatabase"
 
 const firebaseConfig = {
 	apiKey: "AIzaSyAY2Q2VZAuj461g8GMdC7ILxSVTGCkaJTY",

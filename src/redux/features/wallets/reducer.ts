@@ -1,6 +1,7 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
 import { Wallet } from "../../../interfaces/models/wallet"
-import * as dataAccess from "../../../services/dataAccess"
+import * as dataAccess from "../../../services/data-access"
+import { walletsDataAccess } from "../../../services/data-access"
 import { createEntityCRUD } from "../../../utils/entityCrud/entityCrud"
 import { mapEntity } from "./entityMapper"
 import { CreateEntityDto, UpdateEntityDto } from "./interfaces"
@@ -15,7 +16,7 @@ const initialState = adapter.getInitialState({
 
 const thunks = entityCrud.getThunks<CreateEntityDto, UpdateEntityDto>({
 	featureKey: "wallets",
-	dataAccess: dataAccess.wallets,
+	dataAccess: walletsDataAccess,
 	entityMapper: mapEntity,
 })
 

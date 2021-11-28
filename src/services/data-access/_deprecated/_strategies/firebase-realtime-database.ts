@@ -1,5 +1,5 @@
 import { getDatabase, child, get, push, ref, set, update as upd } from "firebase/database"
-import { firebaseApp } from ".."
+import { firebaseApp } from "../../../firebase"
 
 const realtimeDatabase = getDatabase(firebaseApp)
 const realtimeDatabaseRef = ref(getDatabase(firebaseApp))

@@ -18,6 +18,8 @@ export default ({ isNew, category, isOpen, onClose }) => {
 	useEffect(() => {
 		if (isOpen) {
 			setValue("name", category?.name || "")
+			setValue("color_hex", category?.color_hex || "")
+			setValue("icon_fa", category?.icon_fa || "")
 		}
 	}, [isOpen])
 
@@ -48,12 +50,16 @@ export default ({ isNew, category, isOpen, onClose }) => {
 				parent_category_id: null,
 				owner_user_id: null,
 				name: data.name,
+				color_hex: data.color_hex,
+				icon_fa: data.icon_fa,
 			}))
 		}
 		else {
 			dispatch(actions.update({
 				id: category.id,
 				name: data.name,
+				color_hex: data.color_hex,
+				icon_fa: data.icon_fa,
 			}))
 		}
 	};
@@ -73,6 +79,20 @@ export default ({ isNew, category, isOpen, onClose }) => {
 							<FormControl id="name" isRequired mb="6">
 								<FormLabel>Name</FormLabel>
 								<Input {...register("name")} />
+							</FormControl>
+
+							<Divider mb="6" />
+
+							<Heading size="md" mb="6">Appearence</Heading>
+
+							<FormControl id="color_hex" isRequired mb="6">
+								<FormLabel>Color (HEX)</FormLabel>
+								<Input {...register("color_hex")} />
+							</FormControl>
+
+							<FormControl id="icon_fa" isRequired mb="6">
+								<FormLabel>Icon Font Awesome Name</FormLabel>
+								<Input {...register("icon_fa")} />
 							</FormControl>
 						</form>
 					</ModalBody>
