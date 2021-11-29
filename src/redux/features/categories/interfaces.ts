@@ -11,6 +11,7 @@ export type CreateEntityDto = {
 	name: string
 	color_hex: string
 	icon_fa: string
+	type: string
 }
 
 export type UpdateEntityDto = {
@@ -19,4 +20,5 @@ export type UpdateEntityDto = {
 	name?: string
 	color_hex: string
 	icon_fa: string
+	type: string
 }

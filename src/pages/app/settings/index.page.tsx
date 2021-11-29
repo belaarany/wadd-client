@@ -1,11 +1,11 @@
-import { Heading, Tab, TabList, TabPanel, TabPanels, Tabs } from "@chakra-ui/react"
+import { Heading, Tab, TabList, TabPanel, TabPanels, Tabs, Box } from "@chakra-ui/react"
 import React from "react"
 import WalletsTab from "./wallets"
 import CategoriesTab from "./categories"
 
 export default () => {
 	return (
-		<React.Fragment>
+		<Box py="4" px="8">
 			<Heading size="lg" mb="6">Settings</Heading>
 
 			<Tabs colorScheme="brand" defaultIndex={0}>
@@ -15,15 +15,14 @@ export default () => {
 				</TabList>
 
 				<TabPanels>
-					<TabPanel>
+					<TabPanel overflow="auto">
 						<WalletsTab />
 					</TabPanel>
-					<TabPanel>
+					<TabPanel overflow="auto">
 						<CategoriesTab />
 					</TabPanel>
 				</TabPanels>
 			</Tabs>
-
-		</React.Fragment>
+		</Box>
 	)
 }

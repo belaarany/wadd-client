@@ -54,7 +54,7 @@ export default () => {
 								<Tr key={wallet.id}>
 									<Td>
 										<Flex alignItems="center">
-											<Avatar name={wallet.name} src={wallet.icon_url} size="sm" mr="2" />
+											<Avatar name={wallet.name} src={wallet.icon_url} size="sm" mr="3" />
 											<Box>{wallet.name}</Box>
 										</Flex>
 									</Td>

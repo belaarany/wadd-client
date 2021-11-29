@@ -1,13 +1,11 @@
-import { Avatar, Box, Button, Center, Container, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Spacer, Table, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import { Box, Button, Center, Container, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast, VStack, Tag } from "@chakra-ui/react"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
-import { Wallet } from "../../../../interfaces/models/wallet"
+import { Card, CategoryIcon } from "../../../../components"
+import { Category } from "../../../../interfaces/models/category"
 import { actions, selectors } from "../../../../redux/features/categories"
 import { useAppDispatch } from "../../../../redux/store"
 import CategoryModal from "./modal"
-import { Card, CategoryIcon } from "../../../../components"
-import { Category } from "../../../../interfaces/models/category"
-import Color from "color"
 
 export default () => {
 	const toast = useToast()
@@ -15,11 +13,6 @@ export default () => {
 	const categories = useSelector(selectors.selectAll)
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [editCategory, setEditCategory] = useState(null)
-
-	useEffect(() => {
-		dispatch(actions.getAll())
-	}, [])
-
 	const onAddCategoryClick = () => {
 		setEditCategory(null)
 		onOpen()
@@ -44,11 +37,12 @@ export default () => {
 	return (
 		<>
 			<Container maxW="container.lg">
-				<Card header="Categories" action={<Button colorScheme="brand" onClick={onAddCategoryClick}>Add Category</Button>}>
+				<Card header="Income Categories" action={<Button colorScheme="brand" onClick={onAddCategoryClick}>Add Category</Button>}>
 					<Table>
 						<Thead>
 							<Tr>
 								<Th>Category</Th>
+								<Th>Type</Th>
 								<Th w="1%"></Th>
 							</Tr>
 						</Thead>
@@ -57,9 +51,12 @@ export default () => {
 								<Tr key={category.id}>
 									<Td>
 										<Flex alignItems="center">
-											<CategoryIcon colorHex={category.color_hex} iconFa={category.icon_fa} mr="2" />
+											<CategoryIcon colorHex={category.color_hex} iconFa={category.icon_fa} mr="3" />
 											<Box>{category.name}</Box>
 										</Flex>
+									</Td>
+									<Td>
+										<Tag colorScheme={category.type === "income" ? "green" : "red"}>{category.type.toUpperCase()}</Tag>
 									</Td>
 									<Td>
 										<Menu>

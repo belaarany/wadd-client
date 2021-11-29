@@ -1,5 +1,5 @@
 import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Heading, Divider } from "@chakra-ui/react";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Currency } from "../../../../interfaces/enums/currency";
 import { WalletType } from "../../../../interfaces/enums/wallet-type";
@@ -7,6 +7,9 @@ import { actions } from "../../../../redux/features/categories";
 import { useAppDispatch } from "../../../../redux/store";
 import { useToast } from "@chakra-ui/react"
 import { useStateApi } from "../../../../utils/useStateApi";
+import SelectWithIcon from "@wadd/components/SelectWithIcon";
+import { CategoryIcon } from "@wadd/components";
+import { getTypeOptions } from "@wadd/utils/getTypeOptions";
 
 
 export default ({ isNew, category, isOpen, onClose }) => {
@@ -14,6 +17,7 @@ export default ({ isNew, category, isOpen, onClose }) => {
 	const dispatch = useAppDispatch()
 	const { register, handleSubmit, setValue } = useForm();
 	const { state: apiState, onChange: onApiStateChange } = useStateApi("categories")
+	const [type, setType] = useState(null)
 
 	useEffect(() => {
 		if (isOpen) {
@@ -52,6 +56,7 @@ export default ({ isNew, category, isOpen, onClose }) => {
 				name: data.name,
 				color_hex: data.color_hex,
 				icon_fa: data.icon_fa,
+				type: type,
 			}))
 		}
 		else {
@@ -60,9 +65,14 @@ export default ({ isNew, category, isOpen, onClose }) => {
 				name: data.name,
 				color_hex: data.color_hex,
 				icon_fa: data.icon_fa,
+				type: type,
 			}))
 		}
 	};
+
+	const onTypeChange = event => {
+		setType(event.value.id)
+	}
 
 	return (
 		<>
@@ -79,6 +89,18 @@ export default ({ isNew, category, isOpen, onClose }) => {
 							<FormControl id="name" isRequired mb="6">
 								<FormLabel>Name</FormLabel>
 								<Input {...register("name")} />
+							</FormControl>
+
+							<FormControl id="type" isRequired mb="6">
+								<FormLabel>Type</FormLabel>
+								<SelectWithIcon
+									id="type"
+									isFilterable={false}
+									items={getTypeOptions("income", "expense")}
+									icon={(item) => <CategoryIcon colorHex={item.colorHex} iconFa={item.iconFa} mr="0" />}
+									onChange={onTypeChange}
+									defaultValue={category?.type}
+								/>
 							</FormControl>
 
 							<Divider mb="6" />

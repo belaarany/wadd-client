@@ -4,6 +4,7 @@ export const mapEntity = (partialData: Partial<Category>): Category => {
 	return {
 		id: partialData.id,
 		kind: "category",
+		type: partialData.type,
 		owner_user_id: partialData.owner_user_id,
 		parent_category_id: partialData.parent_category_id,
 		name: partialData.name,

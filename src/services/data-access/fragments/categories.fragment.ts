@@ -5,6 +5,7 @@ export const CategoriesGQLFragment = gql`
 		id
 		kind
 		owner_user_id
+		type
 		parent_category_id
 		name
 		color_hex

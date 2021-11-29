@@ -5,6 +5,7 @@ import { Provider } from 'react-redux'
 import { theme } from "../configs/chakraui"
 import { routes } from "../configs/routes"
 import { actions as walletActions } from "../redux/features/wallets"
+import { actions as categoriesActions } from "../redux/features/categories"
 import { store, useAppDispatch } from "../redux/store"
 import "../styles/globals.scss"
 
@@ -23,6 +24,7 @@ const App = ({ Component, pageProps }) => {
 
 	useEffect(() => {
 		dispatch(walletActions.getAll())
+		dispatch(categoriesActions.getAll())
 	}, [])
 
 	return (
@@ -30,7 +32,7 @@ const App = ({ Component, pageProps }) => {
 			<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
 
 			<Flex h="100vh">
-				<Flex w="80px" bg="white" boxShadow="lg" zIndex="20" direction="column" alignItems="center" py="4">
+				<Flex w="80px" bg="white" boxShadow="lg" zIndex="20" direction="column" alignItems="center" py="6">
 					<Box mx="4" mb="8">
 						<Image borderRadius="md" src="/images/wadd_logo.png" />
 					</Box>
@@ -53,7 +55,7 @@ const App = ({ Component, pageProps }) => {
 						))}
 					</Box>
 				</Flex>
-				<Box flex="1" bg="gray.50" zIndex="10" py="4" px="8">
+				<Box flex="1" bg="gray.50" zIndex="10">
 					<Component {...pageProps} />
 				</Box>
 			</Flex>

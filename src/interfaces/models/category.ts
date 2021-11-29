@@ -2,6 +2,7 @@ export type Category = {
 	readonly id: string
 	readonly kind: string
 	owner_user_id: string
+	type: string
 	parent_category_id: string | null
 	name: string
 	color_hex: string

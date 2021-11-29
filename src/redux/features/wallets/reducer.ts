@@ -1,17 +1,17 @@
-import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
-import { Wallet } from "../../../interfaces/models/wallet"
-import * as dataAccess from "../../../services/data-access"
-import { walletsDataAccess } from "../../../services/data-access"
-import { createEntityCRUD } from "../../../utils/entityCrud/entityCrud"
+import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit"
+import { walletsDataAccess } from "@wadd/services/data-access"
 import { mapEntity } from "./entityMapper"
 import { CreateEntityDto, UpdateEntityDto } from "./interfaces"
+import { Wallet } from "@wadd/interfaces/models/wallet"
+import { createEntityCRUD } from "@wadd/utils/entityCrud"
 
 const adapter = createEntityAdapter<Wallet>()
 
 const entityCrud = createEntityCRUD()
 
 const initialState = adapter.getInitialState({
-	...entityCrud.getInitialState()
+	...entityCrud.getInitialState(),
+	activeWalletId: null,
 })
 
 const thunks = entityCrud.getThunks<CreateEntityDto, UpdateEntityDto>({
@@ -23,7 +23,11 @@ const thunks = entityCrud.getThunks<CreateEntityDto, UpdateEntityDto>({
 export const slice = createSlice({
 	name: "wallets",
 	initialState,
-	reducers: {},
+	reducers: {
+		setActiveWalletId: (state, action: PayloadAction<string | null>) => {
+			state.activeWalletId = action.payload
+		},
+	},
 	extraReducers: (builder) => {
 		entityCrud.getReducers(builder, adapter, thunks)
 	},
