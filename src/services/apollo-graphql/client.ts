@@ -1,5 +1,5 @@
 import { ApolloClient, HttpLink, InMemoryCache, NormalizedCache } from "@apollo/client"
-import { getValidAccessToken } from "../mongodb-realm/connection"
+import { getValidAccessToken } from "@wadd/services/mongodb-realm/connection"
 
 export const apolloclient = new ApolloClient({
 	link: new HttpLink({

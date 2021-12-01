@@ -1,9 +1,5 @@
-import { Currency } from "../../../interfaces/enums/currency"
-import { WalletType } from "../../../interfaces/enums/wallet-type"
-
-export interface FeatureState {
-	value: number
-}
+import { Currency } from "@wadd/interfaces/enums/currency"
+import { WalletType } from "@wadd/interfaces/enums/wallet-type"
 
 export type CreateEntityDto = {
 	name: string

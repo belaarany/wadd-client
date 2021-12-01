@@ -1,5 +1,5 @@
-import { Currency } from "../enums/currency";
-import { WalletType } from "../enums/wallet-type";
+import { Currency } from "@wadd/interfaces/enums/currency";
+import { WalletType } from "@wadd/interfaces/enums/wallet-type";
 
 export type Wallet = {
 	readonly id: string

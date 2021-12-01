@@ -1,16 +1,16 @@
-import { Avatar, Box, Button, Center, Container, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Spacer, Table, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
-import React, { useEffect, useState } from "react"
+import { Avatar, Box, Button, Center, Container, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Table, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
+import { Card } from "@wadd/components"
+import { Wallet } from "@wadd/models/wallet"
+import { walletsStore } from "@wadd/redux/features"
+import { useAppDispatch } from "@wadd/redux/store"
+import React, { useState } from "react"
 import { useSelector } from "react-redux"
-import { Wallet } from "../../../../interfaces/models/wallet"
-import { actions, selectors } from "../../../../redux/features/wallets"
-import { useAppDispatch } from "../../../../redux/store"
 import WalletModal from "./modal"
-import { Card } from "../../../../components"
 
 export default () => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
-	const wallets = useSelector(selectors.selectAll)
+	const wallets = useSelector(walletsStore.selectors.selectAll)
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [editWallet, setEditWallet] = useState(null)
 
@@ -25,7 +25,7 @@ export default () => {
 	}
 
 	const onDeleteWalletClick = (wallet: Wallet) => {
-		dispatch(actions.delete(wallet.id))
+		dispatch(walletsStore.actions.delete(wallet.id))
 
 		toast({
 			title: "Wallet deleted",

@@ -1,13 +1,14 @@
 import { createAsyncThunk } from "@reduxjs/toolkit"
+import { getUserIdFromThunkApi } from "@wadd/utils/getUserIdFromThunkApi"
 
 export const getCRUDAsyncThunks = <CreateEntityDtoT, UpdateEntityDtoT extends { id: string }>({featureKey, dataAccess, entityMapper}) => {
 	return {
-		getAll: createAsyncThunk(`${featureKey}/getAll`, async () => {
-			const result = await dataAccess.getAll()
+		getAll: createAsyncThunk(`${featureKey}/getAll`, async (data: never, thunkAPI) => {
+			const result = await dataAccess.getAll(getUserIdFromThunkApi(thunkAPI))
 			return result
 		}),
-		create: createAsyncThunk(`${featureKey}/create`, async (data: CreateEntityDtoT) => {
-			const result = await dataAccess.create({
+		create: createAsyncThunk(`${featureKey}/create`, async (data: CreateEntityDtoT, thunkAPI) => {
+			const result = await dataAccess.create(getUserIdFromThunkApi(thunkAPI), {
 				...entityMapper(data),
 				created_at: new Date().toISOString()
 			})

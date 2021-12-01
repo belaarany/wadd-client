@@ -1,10 +1,8 @@
 import { createEntityAdapter, createSlice } from "@reduxjs/toolkit"
-import { Category } from "../../../interfaces/models/category"
-import * as dataAccess from "../../../services/data-access"
-import { createEntityCRUD } from "../../../utils/entityCrud/entityCrud"
-import { mapEntity } from "./entityMapper"
 import { CreateEntityDto, UpdateEntityDto } from "./interfaces"
-import { categoriesDataAccess } from "../../../services/data-access"
+import { Category, mapCategory } from "@wadd/models/category"
+import { categoryDataAccess } from "@wadd/models/category/data-access"
+import { createEntityCRUD } from "@wadd/utils/entityCrud"
 
 const adapter = createEntityAdapter<Category>()
 
@@ -16,8 +14,8 @@ const initialState = adapter.getInitialState({
 
 const thunks = entityCrud.getThunks<CreateEntityDto, UpdateEntityDto>({
 	featureKey: "categories",
-	dataAccess: categoriesDataAccess,
-	entityMapper: mapEntity,
+	dataAccess: categoryDataAccess,
+	entityMapper: mapCategory,
 })
 
 export const slice = createSlice({

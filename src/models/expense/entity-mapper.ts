@@ -1,8 +1,8 @@
-import { Currency } from "../../../interfaces/enums/currency"
-import { WalletType } from "../../../interfaces/enums/wallet-type"
-import { Wallet } from "../../../interfaces/models/wallet"
+import { Currency } from "@wadd/interfaces/enums/currency"
+import { WalletType } from "@wadd/interfaces/enums/wallet-type"
+import { Wallet } from "@wadd/models/wallet"
 
-export const mapEntity = (partialData: Partial<Wallet>): Wallet => {
+export const mapWallet = (partialData: Partial<Wallet>): Wallet => {
 	return {
 		id: partialData.id,
 		kind: "wallet",

@@ -1,6 +1,6 @@
-import { Category } from "../../../interfaces/models/category"
+import { Category } from "./interface"
 
-export const mapEntity = (partialData: Partial<Category>): Category => {
+export const mapCategory = (partialData: Partial<Category>): Category => {
 	return {
 		id: partialData.id,
 		kind: "category",

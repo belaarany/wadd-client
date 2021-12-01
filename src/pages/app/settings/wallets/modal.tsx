@@ -1,20 +1,16 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Heading, Divider } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Currency } from "../../../../interfaces/enums/currency";
-import { WalletType } from "../../../../interfaces/enums/wallet-type";
-import { actions, reducer } from "../../../../redux/features/wallets";
-import { useAppDispatch, useAppSelector } from "../../../../redux/store";
-import { useToast } from "@chakra-ui/react"
-import { store } from "../../../../redux/store"
-import { useSelector } from "react-redux";
-import { useStateApi } from "../../../../utils/useStateApi";
-
+import { Button, Divider, FormControl, FormLabel, Heading, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, useToast } from "@chakra-ui/react"
+import { Currency } from "@wadd/interfaces/enums/currency"
+import { WalletType } from "@wadd/interfaces/enums/wallet-type"
+import { walletsStore } from "@wadd/redux/features"
+import { useAppDispatch } from "@wadd/redux/store"
+import { useStateApi } from "@wadd/utils/useStateApi"
+import React, { useEffect } from "react"
+import { useForm } from "react-hook-form"
 
 export default ({ isNew, wallet, isOpen, onClose }) => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
-	const { register, handleSubmit, setValue } = useForm();
+	const { register, handleSubmit, setValue } = useForm()
 	const { state: apiState, onChange: onApiStateChange } = useStateApi("wallets")
 
 	useEffect(() => {
@@ -36,8 +32,7 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 					status: "success",
 					duration: 3000,
 				})
-			}
-			else {
+			} else {
 				toast({
 					title: "Error occurred",
 					status: "error",
@@ -47,29 +42,32 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 		}
 	})
 
-	const onSubmit = data => {
+	const onSubmit = (data) => {
 		if (isNew) {
-			dispatch(actions.create({
-				name: data.name,
-				order: 1,
-				owner_user_id: null,
-				initial_balance: data.initial_balance,
-				default_currency: Currency.HUF,
-				type: WalletType.CASH,
-				color_hex: data.color_hex,
-				icon_url: data.icon_url,
-			}))
+			dispatch(
+				walletsStore.actions.create({
+					name: data.name,
+					order: 1,
+					owner_user_id: null,
+					initial_balance: data.initial_balance,
+					default_currency: Currency.HUF,
+					type: WalletType.CASH,
+					color_hex: data.color_hex,
+					icon_url: data.icon_url,
+				}),
+			)
+		} else {
+			dispatch(
+				walletsStore.actions.update({
+					id: wallet.id,
+					name: data.name,
+					initial_balance: data.initial_balance,
+					color_hex: data.color_hex,
+					icon_url: data.icon_url,
+				}),
+			)
 		}
-		else {
-			dispatch(actions.update({
-				id: wallet.id,
-				name: data.name,
-				initial_balance: data.initial_balance,
-				color_hex: data.color_hex,
-				icon_url: data.icon_url,
-			}))
-		}
-	};
+	}
 
 	return (
 		<>
@@ -81,7 +79,9 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 
 					<ModalBody>
 						<form id="form" onSubmit={handleSubmit(onSubmit)}>
-							<Heading size="md" mb="6">General</Heading>
+							<Heading size="md" mb="6">
+								General
+							</Heading>
 
 							<FormControl id="name" isRequired mb="6">
 								<FormLabel>Name</FormLabel>
@@ -95,7 +95,9 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 
 							<Divider mb="6" />
 
-							<Heading size="md" mb="6">Appearence</Heading>
+							<Heading size="md" mb="6">
+								Appearence
+							</Heading>
 
 							<FormControl id="color_hex" isRequired mb="6">
 								<FormLabel>Color (HEX)</FormLabel>
@@ -110,8 +112,12 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button disabled={apiState?.status === "pending"} variant="ghost" mr={3} onClick={onClose}>Close</Button>
-						<Button isLoading={apiState?.status === "pending"} colorScheme="brand" type="submit" form="form">{isNew ? "Create" : "Update"}</Button>
+						<Button disabled={apiState?.status === "pending"} variant="ghost" mr={3} onClick={onClose}>
+							Close
+						</Button>
+						<Button isLoading={apiState?.status === "pending"} colorScheme="brand" type="submit" form="form">
+							{isNew ? "Create" : "Update"}
+						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>

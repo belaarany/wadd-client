@@ -1,16 +1,15 @@
+import { WalletsGQLFragment, Wallet } from "@wadd/models/wallet"
+import { apolloclient } from "@wadd/services/apollo-graphql/client"
+import { generateId } from "@wadd/utils/generateId"
 import gql from "graphql-tag"
-import { Wallet } from "../../interfaces/models/wallet"
-import { generateId } from "../../utils/generateId"
-import { apolloclient } from "../apollo-graphql/client"
-import { WalletsGQLFragment } from "./fragments/wallets.fragment"
 
-export default {
-	getAll: () => {
+export const walletDataAccess = {
+	getAll: (userId: string) => {
 		return new Promise((resolve, reject) => {
 			apolloclient
 				.query({
 					query: gql`
-						query wallets($query: WalletQueryInput){
+						query wallets($query: WalletQueryInput) {
 							wallets(query: $query) {
 								...walletFields
 							}
@@ -20,10 +19,11 @@ export default {
 					`,
 					variables: {
 						query: {
+							owner_user_id: userId,
 							is_deleted: false,
 							is_archived: false,
-						}
-					}
+						},
+					},
 				})
 				.then((result) => {
 					resolve(result.data.wallets)
@@ -34,7 +34,7 @@ export default {
 				})
 		})
 	},
-	create: (data: Wallet) => {
+	create: (userId: string, data: Wallet) => {
 		return new Promise((resolve, reject) => {
 			apolloclient
 				.mutate({
@@ -51,8 +51,9 @@ export default {
 						data: {
 							...data,
 							id: generateId("wal"),
-						}
-					}
+							owner_user_id: userId,
+						},
+					},
 				})
 				.then((result) => {
 					resolve(result.data.insertOneWallet)
@@ -82,8 +83,8 @@ export default {
 						},
 						set: {
 							...data,
-						}
-					}
+						},
+					},
 				})
 				.then((result) => {
 					resolve(result.data.updateOneWallet)

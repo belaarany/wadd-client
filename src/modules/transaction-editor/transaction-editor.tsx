@@ -2,8 +2,8 @@ import { Avatar, Box, Button, CloseButton, Flex, FormControl, FormLabel, Heading
 import { CategoryIcon } from "@wadd/components";
 import SelectWithIcon from "@wadd/components/SelectWithIcon";
 import { walletsStore } from "@wadd/redux/features";
-import { categoriesStore } from "@wadd/redux/features/categories";
-import { useAppDispatch } from "@wadd/redux/store";
+import { categoriesStore } from "@wadd/redux/features";
+import { store, useAppDispatch } from "@wadd/redux/store";
 import { getTypeOptions } from "@wadd/utils/getTypeOptions";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
@@ -26,6 +26,8 @@ export default () => {
 			[event.id]: event.value
 		})
 	}
+
+	console.log(store.getState())
 
 	return (
 		<Box w="370px" ml="8" borderLeft="1px" borderLeftColor="gray.200" bg="white">

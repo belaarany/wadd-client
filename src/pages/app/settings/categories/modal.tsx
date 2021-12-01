@@ -1,21 +1,18 @@
-import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Heading, Divider } from "@chakra-ui/react";
-import React, { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { Currency } from "../../../../interfaces/enums/currency";
-import { WalletType } from "../../../../interfaces/enums/wallet-type";
-import { actions } from "../../../../redux/features/categories";
-import { useAppDispatch } from "../../../../redux/store";
+import { Button, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Heading, Divider } from "@chakra-ui/react"
+import React, { useEffect, useState } from "react"
+import { useForm } from "react-hook-form"
 import { useToast } from "@chakra-ui/react"
-import { useStateApi } from "../../../../utils/useStateApi";
-import SelectWithIcon from "@wadd/components/SelectWithIcon";
-import { CategoryIcon } from "@wadd/components";
-import { getTypeOptions } from "@wadd/utils/getTypeOptions";
-
+import SelectWithIcon from "@wadd/components/SelectWithIcon"
+import { CategoryIcon } from "@wadd/components"
+import { getTypeOptions } from "@wadd/utils/getTypeOptions"
+import { categoriesStore } from "@wadd/redux/features"
+import { useAppDispatch } from "@wadd/redux/store"
+import { useStateApi } from "@wadd/utils/useStateApi"
 
 export default ({ isNew, category, isOpen, onClose }) => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
-	const { register, handleSubmit, setValue } = useForm();
+	const { register, handleSubmit, setValue } = useForm()
 	const { state: apiState, onChange: onApiStateChange } = useStateApi("categories")
 	const [type, setType] = useState(null)
 
@@ -37,8 +34,7 @@ export default ({ isNew, category, isOpen, onClose }) => {
 					status: "success",
 					duration: 3000,
 				})
-			}
-			else {
+			} else {
 				toast({
 					title: "Error occurred",
 					status: "error",
@@ -48,29 +44,32 @@ export default ({ isNew, category, isOpen, onClose }) => {
 		}
 	})
 
-	const onSubmit = data => {
+	const onSubmit = (data) => {
 		if (isNew) {
-			dispatch(actions.create({
-				parent_category_id: null,
-				owner_user_id: null,
-				name: data.name,
-				color_hex: data.color_hex,
-				icon_fa: data.icon_fa,
-				type: type,
-			}))
+			dispatch(
+				categoriesStore.actions.create({
+					parent_category_id: null,
+					owner_user_id: null,
+					name: data.name,
+					color_hex: data.color_hex,
+					icon_fa: data.icon_fa,
+					type: type,
+				}),
+			)
+		} else {
+			dispatch(
+				categoriesStore.actions.update({
+					id: category.id,
+					name: data.name,
+					color_hex: data.color_hex,
+					icon_fa: data.icon_fa,
+					type: type,
+				}),
+			)
 		}
-		else {
-			dispatch(actions.update({
-				id: category.id,
-				name: data.name,
-				color_hex: data.color_hex,
-				icon_fa: data.icon_fa,
-				type: type,
-			}))
-		}
-	};
+	}
 
-	const onTypeChange = event => {
+	const onTypeChange = (event) => {
 		setType(event.value.id)
 	}
 
@@ -84,7 +83,9 @@ export default ({ isNew, category, isOpen, onClose }) => {
 
 					<ModalBody>
 						<form id="form" onSubmit={handleSubmit(onSubmit)}>
-							<Heading size="md" mb="6">General</Heading>
+							<Heading size="md" mb="6">
+								General
+							</Heading>
 
 							<FormControl id="name" isRequired mb="6">
 								<FormLabel>Name</FormLabel>
@@ -105,7 +106,9 @@ export default ({ isNew, category, isOpen, onClose }) => {
 
 							<Divider mb="6" />
 
-							<Heading size="md" mb="6">Appearence</Heading>
+							<Heading size="md" mb="6">
+								Appearence
+							</Heading>
 
 							<FormControl id="color_hex" isRequired mb="6">
 								<FormLabel>Color (HEX)</FormLabel>
@@ -120,8 +123,12 @@ export default ({ isNew, category, isOpen, onClose }) => {
 					</ModalBody>
 
 					<ModalFooter>
-						<Button disabled={apiState?.status === "pending"} variant="ghost" mr={3} onClick={onClose}>Close</Button>
-						<Button isLoading={apiState?.status === "pending"} colorScheme="brand" type="submit" form="form">{isNew ? "Create" : "Update"}</Button>
+						<Button disabled={apiState?.status === "pending"} variant="ghost" mr={3} onClick={onClose}>
+							Close
+						</Button>
+						<Button isLoading={apiState?.status === "pending"} colorScheme="brand" type="submit" form="form">
+							{isNew ? "Create" : "Update"}
+						</Button>
 					</ModalFooter>
 				</ModalContent>
 			</Modal>

@@ -1,16 +1,16 @@
 import { Box, Button, Center, Container, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast, VStack, Tag } from "@chakra-ui/react"
 import React, { useState } from "react"
 import { useSelector } from "react-redux"
-import { Card, CategoryIcon } from "../../../../components"
-import { Category } from "../../../../interfaces/models/category"
-import { actions, selectors } from "../../../../redux/features/categories"
-import { useAppDispatch } from "../../../../redux/store"
+import { useAppDispatch } from "@wadd/redux/store"
+import { categoriesStore } from "@wadd/redux/features"
 import CategoryModal from "./modal"
+import { Category } from "@wadd/models/category"
+import { Card, CategoryIcon } from "@wadd/components"
 
 export default () => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
-	const categories = useSelector(selectors.selectAll)
+	const categories = useSelector(categoriesStore.selectors.selectAll)
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [editCategory, setEditCategory] = useState(null)
 	const onAddCategoryClick = () => {
@@ -24,7 +24,7 @@ export default () => {
 	}
 
 	const onDeleteCategoryClick = (category: Category) => {
-		dispatch(actions.delete(category.id))
+		dispatch(categoriesStore.actions.delete(category.id))
 
 		toast({
 			title: "Category deleted",

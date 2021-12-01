@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react"
-import { useAppSelector } from "../redux/store"
+import { useAppSelector } from "@wadd/redux/store"
 
 export const useStateApi = (feature: string) => {
 	const [prev, setPrev] = useState(null)
