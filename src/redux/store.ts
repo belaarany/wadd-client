@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit"
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux"
-import { sessionStore, walletsStore, categoriesStore } from "./features/index"
+import { sessionStore, walletsStore, categoriesStore, transactionsStore } from "./features/index"
 
 export const store = configureStore({
 	reducer: {
 		session: sessionStore.reducer,
 		wallets: walletsStore.reducer,
 		categories: categoriesStore.reducer,
+		transactions: transactionsStore.reducer,
 	},
 })
 

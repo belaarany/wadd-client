@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react"
 import { useAppSelector } from "@wadd/redux/store"
 
-export const useStateApi = (feature: string) => {
+export const useApiState = (feature: string) => {
 	const [prev, setPrev] = useState(null)
 	const next = useAppSelector((state) => state[feature].api)
 

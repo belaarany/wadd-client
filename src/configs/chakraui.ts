@@ -1,6 +1,9 @@
 import { extendTheme } from "@chakra-ui/react"
 
 export const theme = extendTheme({
+	config: {
+		initialColorMode: "light",
+	},
 	fonts: {
 		heading: "Quicksand",
 		body: "Quicksand",
@@ -19,5 +22,21 @@ export const theme = extendTheme({
 			900: "#383465",
 		},
 	},
-	components: {},
+	components: {
+		Code: {
+			baseStyle: {
+				fontSize: "xs",
+				borderRadius: "base",
+			},
+			variants: {
+				outline: ({ colorScheme }) => ({
+					border: "1px",
+					borderColor: `${colorScheme}.200`,
+					background: `${colorScheme}.50`,
+					color: `${colorScheme}.500`,
+					boxShadow: "none",
+				}),
+			},
+		},
+	},
 })

@@ -1,15 +1,16 @@
-import { Box, Center, ChakraProvider, Flex, Image, theme } from "@chakra-ui/react"
-import NextLink from 'next/link'
+import { Box, Center, ChakraProvider, Flex, Image, Spinner } from "@chakra-ui/react"
+import NextLink from "next/link"
 import { useEffect } from "react"
-import { Provider as ReduxProvider } from 'react-redux'
+import { Provider as ReduxProvider } from "react-redux"
 import { store, useAppDispatch } from "@wadd/redux/store"
 import "@wadd/styles/globals.scss"
-import { Auth0Provider } from "@auth0/auth0-react";
-import { useAuth0 } from "@auth0/auth0-react";
+import { Auth0Provider } from "@auth0/auth0-react"
+import { useAuth0 } from "@auth0/auth0-react"
 import { auth0 } from "@wadd/configs/auth0"
 import { routes } from "@wadd/configs/routes"
-import { sessionStore, walletsStore, categoriesStore } from "@wadd/redux/features"
-
+import { sessionStore, walletsStore, categoriesStore, transactionsStore } from "@wadd/redux/features"
+import { theme } from "@wadd/configs/chakraui"
+import ActiveLink from "@wadd/components/ActiveLink"
 
 export default ({ Component, pageProps }) => {
 	return (
@@ -29,11 +30,10 @@ const App = ({ Component, pageProps }) => {
 
 	useEffect(() => {
 		if (isAuthenticated) {
-			console.log({ user })
 			dispatch(sessionStore.actions.setUser(user))
 
-			dispatch(walletsStore.actions.getAll())
-			dispatch(categoriesStore.actions.getAll())
+			dispatch(walletsStore.actions.getAll({}))
+			dispatch(categoriesStore.actions.getAll({}))
 		}
 	}, [isAuthenticated])
 
@@ -44,7 +44,11 @@ const App = ({ Component, pageProps }) => {
 	}, [isLoading])
 
 	if (isLoading || !isAuthenticated) {
-		return <h1>loading...</h1>
+		return (
+			<Center h="100vh">
+				<Spinner />
+			</Center>
+		)
 	}
 
 	return (
@@ -57,21 +61,55 @@ const App = ({ Component, pageProps }) => {
 						<Image borderRadius="md" src="/images/wadd_logo.png" />
 					</Box>
 					<Box flex="1" w="100%">
-						{routes.primary.map(route => (
-							<NextLink href={route.path} key={route.path}>
-								<Center color="gray.500" bg="white" h="45px" mx="4" mb="4" borderRadius="md">
-									<i className={route.icon}></i>
-								</Center>
-							</NextLink>
+						{routes.primary.map((route) => (
+							<ActiveLink
+								href={route.path}
+								key={route.path}
+								as={Center}
+								color="gray.500"
+								bg="white"
+								h="45px"
+								mx="4"
+								mb="4"
+								borderRadius="md"
+								cursor="pointer"
+								_hover={{
+									bg: "gray.100",
+									// color: "brand.500",
+								}}
+								activeProps={{
+									bg: "brand.50",
+									color: "brand.500",
+								}}
+							>
+								<i className={route.icon}></i>
+							</ActiveLink>
 						))}
 					</Box>
 					<Box w="100%">
-						{routes.secondary.map(route => (
-							<NextLink href={route.path} key={route.path}>
-								<Center color="gray.500" bg="white" h="45px" mx="4" mb="4" borderRadius="md">
-									<i className={route.icon}></i>
-								</Center>
-							</NextLink>
+						{routes.secondary.map((route) => (
+							<ActiveLink
+								href={route.path}
+								key={route.path}
+								as={Center}
+								color="gray.500"
+								bg="white"
+								h="45px"
+								mx="4"
+								mb="4"
+								borderRadius="md"
+								cursor="pointer"
+								_hover={{
+									bg: "gray.100",
+									// color: "brand.500",
+								}}
+								activeProps={{
+									bg: "brand.50",
+									color: "brand.500",
+								}}
+							>
+								<i className={route.icon}></i>
+							</ActiveLink>
 						))}
 						<Center color="gray.500" bg="white" h="45px" mx="4" mb="4" borderRadius="md" onClick={() => logout({ returnTo: "http://ubuntu-vm:3000/app/transactions" })}>
 							<i className="fad fa-sign-out"></i>

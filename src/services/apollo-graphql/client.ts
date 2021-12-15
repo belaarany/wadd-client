@@ -3,7 +3,7 @@ import { getValidAccessToken } from "@wadd/services/mongodb-realm/connection"
 
 export const apolloclient = new ApolloClient({
 	link: new HttpLink({
-		uri: `https://realm.mongodb.com/api/client/v2.0/app/application-0-awlwg/graphql`,
+		uri: process.env.NEXT_PUBLIC_MONGODB_GRAPHQL_ENDPOINT,
 		fetch: async (uri, options) => {
 			const accessToken = await getValidAccessToken()
 			options.headers["Authorization"] = `Bearer ${accessToken}`
@@ -11,4 +11,14 @@ export const apolloclient = new ApolloClient({
 		},
 	}),
 	cache: new InMemoryCache(),
+	defaultOptions: {
+		watchQuery: {
+			fetchPolicy: "no-cache",
+			errorPolicy: "ignore",
+		},
+		query: {
+			fetchPolicy: "no-cache",
+			errorPolicy: "all",
+		},
+	},
 })

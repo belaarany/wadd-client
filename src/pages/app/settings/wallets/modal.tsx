@@ -3,7 +3,7 @@ import { Currency } from "@wadd/interfaces/enums/currency"
 import { WalletType } from "@wadd/interfaces/enums/wallet-type"
 import { walletsStore } from "@wadd/redux/features"
 import { useAppDispatch } from "@wadd/redux/store"
-import { useStateApi } from "@wadd/utils/useStateApi"
+import { useApiState } from "@wadd/utils/useApiState"
 import React, { useEffect } from "react"
 import { useForm } from "react-hook-form"
 
@@ -11,7 +11,7 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
 	const { register, handleSubmit, setValue } = useForm()
-	const { state: apiState, onChange: onApiStateChange } = useStateApi("wallets")
+	const { state: apiState, onChange: onApiStateChange } = useApiState("wallets")
 
 	useEffect(() => {
 		if (isOpen) {
@@ -23,7 +23,7 @@ export default ({ isNew, wallet, isOpen, onClose }) => {
 	}, [isOpen])
 
 	onApiStateChange((prev, state) => {
-		if (prev?.status && state.status === "idle") {
+		if ((prev?.operation === "create" || prev?.operation === "update") && state.status === "idle") {
 			if (!state.error) {
 				onClose()
 

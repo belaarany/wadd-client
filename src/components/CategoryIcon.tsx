@@ -5,7 +5,7 @@ export default ({ colorHex, iconFa, mr }) => (
 	<Center bg="white" w="32px" h="32px" borderRadius="50%" overflow="hidden" mr={mr || 0}>
 		<Center p="2" w="full" h="full" style={{
 			color: colorHex,
-			backgroundColor: Color(colorHex).fade(0.85)
+			backgroundColor: Color(colorHex).fade(0.8)
 		}}>
 			<i className={`fad fa-${iconFa}`}></i>
 		</Center>

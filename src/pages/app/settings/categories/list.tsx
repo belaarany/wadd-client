@@ -1,16 +1,15 @@
-import { Box, Button, Center, Container, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Table, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast, VStack, Tag } from "@chakra-ui/react"
-import React, { useState } from "react"
-import { useSelector } from "react-redux"
-import { useAppDispatch } from "@wadd/redux/store"
-import { categoriesStore } from "@wadd/redux/features"
-import CategoryModal from "./modal"
-import { Category } from "@wadd/models/category"
+import { Box, Button, Center, Container, Flex, IconButton, Menu, MenuButton, MenuItem, MenuList, Table, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
 import { Card, CategoryIcon } from "@wadd/components"
+import { Category } from "@wadd/models/category"
+import { categoriesStore } from "@wadd/redux/features"
+import { useAppDispatch, useAppSelector } from "@wadd/redux/store"
+import React, { useState } from "react"
+import CategoryModal from "./modal"
 
 export default () => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
-	const categories = useSelector(categoriesStore.selectors.selectAll)
+	const categories = useAppSelector(categoriesStore.selectors.selectAll)
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [editCategory, setEditCategory] = useState(null)
 	const onAddCategoryClick = () => {

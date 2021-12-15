@@ -1,7 +1,7 @@
 import { createEntityAdapter, createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { CreateEntityDto, UpdateEntityDto } from "./interfaces"
+import { Wallet, walletDataAccess } from "@wadd/models/wallet"
 import { createEntityCRUD } from "@wadd/utils/entityCrud"
-import { Wallet, mapWallet, walletDataAccess } from "@wadd/models/wallet"
+import { CreateEntityDto, UpdateEntityDto } from "./interfaces"
 
 const adapter = createEntityAdapter<Wallet>()
 
@@ -15,7 +15,6 @@ const initialState = adapter.getInitialState({
 const thunks = entityCrud.getThunks<CreateEntityDto, UpdateEntityDto>({
 	featureKey: "wallets",
 	dataAccess: walletDataAccess,
-	entityMapper: mapWallet,
 })
 
 export const slice = createSlice({
@@ -35,6 +34,7 @@ export const reducer = slice.reducer
 
 export const selectors = {
 	...adapter.getSelectors((state: any) => state.wallets),
+	activeWalletId: ((state) => state.wallets.activeWalletId)
 }
 
 export const actions = {

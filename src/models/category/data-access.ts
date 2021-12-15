@@ -1,4 +1,4 @@
-import { CategoriesGQLFragment, Category } from "@wadd/models/category"
+import { CategoriesGQLFragment, Category, mapCategory } from "@wadd/models/category"
 import { apolloclient } from "@wadd/services/apollo-graphql/client"
 import { generateId } from "@wadd/utils/generateId"
 import gql from "graphql-tag"
@@ -34,7 +34,7 @@ export const categoryDataAccess = {
 				})
 		})
 	},
-	create: (userId: string, data: Category) => {
+	create: (userId: string, data: Partial<Category>) => {
 		return new Promise((resolve, reject) => {
 			apolloclient
 				.mutate({
@@ -49,7 +49,7 @@ export const categoryDataAccess = {
 					`,
 					variables: {
 						data: {
-							...data,
+							...mapCategory(data),
 							id: generateId("cat"),
 							owner_user_id: userId,
 						},

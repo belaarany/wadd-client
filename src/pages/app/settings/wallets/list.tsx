@@ -2,15 +2,14 @@ import { Avatar, Box, Button, Center, Container, Flex, IconButton, Menu, MenuBut
 import { Card } from "@wadd/components"
 import { Wallet } from "@wadd/models/wallet"
 import { walletsStore } from "@wadd/redux/features"
-import { useAppDispatch } from "@wadd/redux/store"
+import { useAppDispatch, useAppSelector } from "@wadd/redux/store"
 import React, { useState } from "react"
-import { useSelector } from "react-redux"
 import WalletModal from "./modal"
 
 export default () => {
 	const toast = useToast()
 	const dispatch = useAppDispatch()
-	const wallets = useSelector(walletsStore.selectors.selectAll)
+	const wallets = useAppSelector(walletsStore.selectors.selectAll)
 	const { isOpen, onOpen, onClose } = useDisclosure()
 	const [editWallet, setEditWallet] = useState(null)
 
