@@ -3,8 +3,7 @@
 
 ### dotenv ###
 .env
-.env.*
-!.env.example
+.env.*local
 
 ### NextJS ###
 # Next build dir
