@@ -10,6 +10,11 @@ export const routes = {
 			icon: "fad fa-analytics",
 			path: "/app/analytics",
 		},
+		{
+			label: "Savings",
+			icon: "fad fa-sack-dollar",
+			path: "/app/savings",
+		},
 	],
 	secondary: [
 		{

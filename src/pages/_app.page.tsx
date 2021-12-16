@@ -11,6 +11,7 @@ import { routes } from "@wadd/configs/routes"
 import { sessionStore, walletsStore, categoriesStore, transactionsStore } from "@wadd/redux/features"
 import { theme } from "@wadd/configs/chakraui"
 import ActiveLink from "@wadd/components/ActiveLink"
+import { Head } from "next/document"
 
 export default ({ Component, pageProps }) => {
 	return (
@@ -53,8 +54,6 @@ const App = ({ Component, pageProps }) => {
 
 	return (
 		<>
-			<link href="https://cdn.jsdelivr.net/gh/hung1001/font-awesome-pro@4cac1a6/css/all.css" rel="stylesheet" type="text/css" />
-
 			<Flex h="100vh">
 				<Flex w="80px" bg="white" boxShadow="lg" zIndex="20" direction="column" alignItems="center" py="6">
 					<Box mx="4" mb="8">

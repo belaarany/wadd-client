@@ -24,6 +24,14 @@ export default () => {
 				fontWeight="semibold"
 				onClick={() => dispatch(walletsStore.actions.setActiveWalletId(null))}
 				boxShadow={activeWalletId === null && "var(--chakra-colors-gray-500) 0px 0px 0px 1.5px"}
+				position="relative"
+				overflow="hidden"
+				cursor="pointer"
+				transitionProperty="common"
+				transitionDuration="normal"
+				_hover={{
+					boxShadow: `var(--chakra-colors-gray-500) 0px 0px 0px 1px`
+				}}
 			>
 				All Wallets
 			</Box>
@@ -44,11 +52,30 @@ export default () => {
 					w="full"
 					border="1px"
 					borderRadius="md"
+					cursor="pointer"
 					style={{
 						borderColor: wallet.color_hex,
-						backgroundColor: Color(wallet.color_hex).fade(0.85),
+						// backgroundColor: Color(wallet.color_hex).fade(0.85),
 					}}
-					// bgGradient={`linear(to-tl, ${Color(wallet.color_hex).fade(0.65)}, ${Color(wallet.color_hex).fade(0.85)})`}
+					bgGradient={`linear(to-tl, ${Color(wallet.color_hex).fade(0.65)}, ${Color(wallet.color_hex).fade(0.85)})`}
+					position="relative"
+					overflow="hidden"
+					transitionProperty="common"
+					transitionDuration="normal"
+					_after={{
+						content: "''",
+						position: "absolute",
+						top: "0",
+						bottom: "0",
+						left: "0",
+						right: "0",
+						backgroundImage: `url(${wallet.icon_url})`,
+						backgroundPosition: "center center",
+						opacity: "0.025",
+					}}
+					_hover={{
+						boxShadow: `${wallet.color_hex} 0px 0px 0px 1px`
+					}}
 					boxShadow={activeWalletId === wallet.id && `${wallet.color_hex} 0px 0px 0px 1.5px`}
 					onClick={() => dispatch(walletsStore.actions.setActiveWalletId(wallet.id))}
 				>

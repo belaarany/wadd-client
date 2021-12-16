@@ -1,4 +1,4 @@
-import { Flex, Heading, Table, Tbody, Td, toast, Box, Thead, Th, useDisclosure, Button, Center, Spinner, Stack, Grid, Tag, Skeleton } from "@chakra-ui/react"
+import { Flex, Heading, Table, Tbody, Td, toast, Box, Thead, Th, useDisclosure, Button, Center, Spinner, Stack, Grid, Tag, Skeleton, Image } from "@chakra-ui/react"
 import { CategoryIcon } from "@wadd/components"
 import TransactionEditor from "@wadd/modules/transaction-editor"
 import WalletsSidebar from "@wadd/modules/wallets-sidebar"
@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react"
 import moment from "moment"
 import _ from "lodash"
 import { Transaction } from "@wadd/models/transaction"
+import { getTypeOptions } from "@wadd/utils/getTypeOptions"
 
 export default () => {
 	const dispatch = useAppDispatch()
@@ -17,13 +18,13 @@ export default () => {
 	const walletIds = useAppSelector(walletsStore.selectors.selectIds)
 	const categoryEntities = useAppSelector(categoriesStore.selectors.selectEntities)
 	const activeWalletId = useAppSelector(walletsStore.selectors.activeWalletId)
-	const { onChange: onWalletsApiStateChange } = useApiState("wallets")
+	const walletsApiState = useApiState("wallets")
 	const { state: transactionsApiState } = useApiState("transactions")
 	const { isOpen: isTransactionEditorOpen, onOpen: onTransactionEditorOpen, onClose: onTransactionEditorClose } = useDisclosure()
 	const [activeTransaction, setActiveTranaction] = useState<null | Transaction>(null)
 
 	useEffect(() => {
-		if (!walletIds) {
+		if (!walletIds.length) {
 			return
 		}
 
@@ -34,9 +35,9 @@ export default () => {
 		)
 	}, [activeWalletId])
 
-	onWalletsApiStateChange((prev, state) => {
+	walletsApiState.onChange((prev, state) => {
 		if (prev?.status && prev?.operation === "getAll" && state.status === "idle") {
-			if (!walletIds) {
+			if (!walletIds.length) {
 				return
 			}
 
@@ -74,7 +75,7 @@ export default () => {
 						</Flex>
 
 						<Box w="100%" px="8" pb="6" overflowY="auto">
-							{transactionsApiState.status === "pending" /*&& transactionsApiState.operation === "getAll"*/ && (
+							{transactionsApiState.status === "pending" && (
 								<Stack spacing="6">
 									<Stack>
 										<Skeleton startColor="gray.100" endColor="gray.200" w="130px" h="20px" borderRadius="base" />
@@ -96,7 +97,15 @@ export default () => {
 									</Stack>
 								</Stack>
 							)}
-							{transactionsApiState.status === "idle" && (
+							{transactionsApiState.status === "idle" && transactions.length === 0 && walletsApiState.state.status === "idle" && (
+								<Center mt="10%">
+									<Stack align="center">
+										<Image src="/images/empty.png" boxSize="250px" />
+										<Heading size="md">No transactions</Heading>
+									</Stack>
+								</Center>
+							)}
+							{transactionsApiState.status === "idle" && transactions.length > 0 && (
 								<>
 									{/* <Grid templateColumns="repeat(4, 1fr)" gap={6} py="2" px="4" textTransform="uppercase" fontSize="sm" fontWeight="semibold">
 										<Box>Category</Box>
@@ -122,10 +131,12 @@ export default () => {
 															px="4"
 															key={transaction.id}
 															data-transaction-id={transaction.id}
+															cursor="pointer"
 															_hover={{
-																cursor: "pointer",
 																backgroundColor: "gray.100",
 															}}
+															transitionProperty="common"
+															transitionDuration="normal"
 															onClick={() => onTransactionClick(transaction)}
 														>
 															{transaction.kind === "income" && (
@@ -181,6 +192,37 @@ export default () => {
 																	<Box isNumeric fontFamily="mono" color="red.400" textAlign="right">
 																		{"-"}
 																		{transaction.amount} {" HUF"}
+																	</Box>
+																</>
+															)}
+															{transaction.kind === "transfer" && (
+																<>
+																	<Box>
+																		<Flex direction="row" alignItems="center">
+																			<CategoryIcon iconFa={getTypeOptions("transfer")[0].iconFa} colorHex={getTypeOptions("transfer")[0].colorHex} mr="4" />
+																			<Flex direction="column">
+																				<Box fontWeight="medium" mb="0.5">
+																					{activeWalletId === null && "Transfer"}
+																					{activeWalletId === transaction.target_wallet_id && "Incoming Transfer"}
+																					{activeWalletId === transaction.source_wallet_id && "Outgoing Transfer"}
+																				</Box>
+																				<Stack direction="row" spacing="1.5" fontWeight="normal" fontSize="xs" color="gray.500">
+																					<Box>{walletEntities[transaction.source_wallet_id]?.name || "N/A"}</Box>
+																					<Box>
+																						<i className="fal fa-long-arrow-right"></i>
+																					</Box>
+																					<Box>{walletEntities[transaction.target_wallet_id]?.name || "N/A"}</Box>
+																				</Stack>
+																			</Flex>
+																		</Flex>
+																	</Box>
+																	<Box>{transaction.note || "---"}</Box>
+																	<Box>---</Box>
+																	<Box>---</Box>
+																	<Box isNumeric fontFamily="mono" color="blue.400" textAlign="right">
+																		{activeWalletId === transaction.target_wallet_id && "+"}
+																		{activeWalletId === transaction.source_wallet_id && "-"}
+																		{transaction.source_amount} {" HUF"}
 																	</Box>
 																</>
 															)}

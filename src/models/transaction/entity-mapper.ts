@@ -1,6 +1,6 @@
 import { Currency } from "@wadd/interfaces/enums/currency"
 import { WalletType } from "@wadd/interfaces/enums/wallet-type"
-import { Expense, Income } from "."
+import { Expense, Income, Transfer } from "."
 
 export const mapIncome = (partialData: Partial<Income>): Income => {
 	return {
@@ -46,6 +46,25 @@ export const mapExpense = (partialData: Partial<Expense>): Expense => {
 		created_at: partialData.created_at || null,
 		updated_at: partialData.updated_at || null,
 		cancelled_at: partialData.cancelled_at || null,
+		deleted_at: partialData.deleted_at || null,
+	}
+}
+
+export const mapTransfer = (partialData: Partial<Transfer>): Transfer => {
+	return {
+		id: partialData.id,
+		kind: "transfer",
+		source_wallet_id: partialData.source_wallet_id,
+		source_amount: partialData.source_amount,
+		source_currency: partialData.source_currency || Currency.HUF,
+		target_wallet_id: partialData.target_wallet_id,
+		target_amount: partialData.target_amount,
+		target_currency: partialData.target_currency || Currency.HUF,
+		timestamp: partialData.timestamp,
+		note: partialData.note || "",
+		is_deleted: partialData.is_deleted || false,
+		created_at: partialData.created_at || null,
+		updated_at: partialData.updated_at || null,
 		deleted_at: partialData.deleted_at || null,
 	}
 }

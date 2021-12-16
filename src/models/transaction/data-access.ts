@@ -2,40 +2,39 @@ import { WalletsGQLFragment } from "@wadd/models/wallet"
 import { apolloclient } from "@wadd/services/apollo-graphql/client"
 import { generateId } from "@wadd/utils/generateId"
 import gql from "graphql-tag"
-import { Expense, ExpensesGQLFragment, Income, IncomesGQLFragment, mapExpense, mapIncome, Transaction } from "."
+import { Expense, ExpensesGQLFragment, Income, IncomesGQLFragment, mapExpense, mapIncome, mapTransfer, Transaction, Transfer, TransfersGQLFragment } from "."
 import _ from "lodash"
 
 export const transactionDataAccess = {
 	getAll: (userId: string, filter: any) => {
 		return new Promise((resolve, reject) => {
-			const walletIdQuery = {}
-			console.log(filter)
 			apolloclient
 				.query({
 					query: gql`
 						query transactions($wallet_id_in: [String]) {
-							incomes(query: {
-								wallet_id_in: $wallet_id_in
-							}) {
+							incomes(query: { wallet_id_in: $wallet_id_in }) {
 								...incomeFields
 							}
 
-							expenses(query: {
-								wallet_id_in: $wallet_id_in
-							}) {
+							expenses(query: { wallet_id_in: $wallet_id_in }) {
 								...expenseFields
+							}
+
+							transfers(query: { OR: [{ source_wallet_id_in: $wallet_id_in }, { target_wallet_id_in: $wallet_id_in }] }) {
+								...transferFields
 							}
 						}
 
 						${IncomesGQLFragment}
 						${ExpensesGQLFragment}
+						${TransfersGQLFragment}
 					`,
 					variables: {
 						wallet_id_in: filter.selectedWalletIds,
 					},
 				})
 				.then((result) => {
-					resolve([...result.data.incomes, ...result.data.expenses])
+					resolve([...result.data.incomes, ...result.data.expenses, ...result.data.transfers])
 				})
 				.catch((error) => {
 					console.log(error)
@@ -64,15 +63,45 @@ export const transactionDataAccess = {
 
 				${ExpensesGQLFragment}
 			`
+			const insertOneTransfer = gql`
+				mutation insertOneTranaction($data: TransferInsertInput!) {
+					insertOneTranaction: insertOneTransfer(data: $data) {
+						...transferFields
+					}
+				}
+
+				${TransfersGQLFragment}
+			`
 
 			apolloclient
 				.mutate({
-					mutation: data._type === "income" ? insertOneIncome : insertOneExpense,
+					mutation: (() => {
+						switch (data._type) {
+							case "income":
+								return insertOneIncome
+							case "expense":
+								return insertOneExpense
+							case "transfer":
+								return insertOneTransfer
+						}
+					})(),
 					variables: {
 						data: {
 							...(data._type === "income" && mapIncome(data as Income)),
 							...(data._type === "expense" && mapExpense(data as Expense)),
-							id: generateId("inc"),
+							...(data._type === "transfer" && mapTransfer(data as Transfer)),
+							id: generateId(
+								(() => {
+									switch (data._type) {
+										case "income":
+											return "inc"
+										case "expense":
+											return "exp"
+										case "transfer":
+											return "trf"
+									}
+								})(),
+							),
 						},
 					},
 				})
@@ -105,18 +134,33 @@ export const transactionDataAccess = {
 
 				${ExpensesGQLFragment}
 			`
+			const updateOneTransfer = gql`
+				mutation updateOneTranaction($query: TransferQueryInput, $set: TransferUpdateInput!) {
+					updateOneTranaction: updateOneTransfer(query: $query, set: $set) {
+						...transferFields
+					}
+				}
+
+				${TransfersGQLFragment}
+			`
 
 			apolloclient
 				.mutate({
-					mutation: data._type === "income" ? updateOneIncome : updateOneExpense,
+					mutation: (() => {
+						switch (data._type) {
+							case "income":
+								return updateOneIncome
+							case "expense":
+								return updateOneExpense
+							case "transfer":
+								return updateOneTransfer
+						}
+					})(),
 					variables: {
 						query: {
 							id: data.id,
 						},
 						set: {
-							// ...(data._type === "income" && mapIncome(data as Income)),
-							// ...(data._type === "expense" && mapExpense(data as Expense)),
-							// id: generateId("inc"),
 							..._.omit(data, ["id", "kind", "_type"]),
 						},
 					},

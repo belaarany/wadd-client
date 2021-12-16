@@ -46,6 +46,7 @@ export default (props: Props) => {
 	const isNew = useMemo(() => !props.transaction, [props.transaction])
 	const apiCreating = useMemo(() => apiState?.operation === "create" && apiState?.status === "pending", [apiState])
 	const apiUpdating = useMemo(() => apiState?.operation === "update" && apiState?.status === "pending", [apiState])
+	const [type, setType] = useState(null)
 
 	onApiStateChange((prev, state) => {
 		if (prev?.status && (prev.operation === "create" || prev.operation === "update") && state.status === "idle") {
@@ -55,6 +56,13 @@ export default (props: Props) => {
 					status: "success",
 					duration: 3000,
 				})
+
+				if (prev.operation === "create") {
+					resetForm()
+				} else {
+					resetForm()
+					props.onCloseClick()
+				}
 			} else {
 				toast({
 					title: "Error occurred",
@@ -69,54 +77,145 @@ export default (props: Props) => {
 		if (isNew) {
 			resetForm()
 		} else {
-			setValue("timestamp", moment(props.transaction.timestamp).format("YYYY-MM-DD"))
-			setValue("type", props.transaction.kind)
-			setValue("wallet_id", props.transaction.wallet_id)
-			setValue("category_id", props.transaction.category_id)
-			setValue("amount", props.transaction.amount)
-			setValue("location", props.transaction.location)
-			setValue("note", props.transaction.note)
-			setValue("tags", props.transaction.tags.join(","))
+			setType(props.transaction.kind)
+
+			switch (props.transaction.kind) {
+				case "income": {
+					setValue("timestamp", moment(props.transaction.timestamp).format("YYYY-MM-DD"))
+					setValue("wallet_id", props.transaction.wallet_id)
+					setValue("category_id", props.transaction.category_id)
+					setValue("amount", props.transaction.amount)
+					setValue("location", props.transaction.location)
+					setValue("note", props.transaction.note)
+					setValue("tags", props.transaction.tags.join(","))
+					break
+				}
+				case "expense": {
+					setValue("timestamp", moment(props.transaction.timestamp).format("YYYY-MM-DD"))
+					setValue("wallet_id", props.transaction.wallet_id)
+					setValue("category_id", props.transaction.category_id)
+					setValue("amount", props.transaction.amount)
+					setValue("location", props.transaction.location)
+					setValue("note", props.transaction.note)
+					setValue("tags", props.transaction.tags.join(","))
+					break
+				}
+				case "transfer": {
+					setValue("timestamp", moment(props.transaction.timestamp).format("YYYY-MM-DD"))
+					setValue("source_wallet_id", props.transaction.source_wallet_id)
+					setValue("target_wallet_id", props.transaction.target_wallet_id)
+					setValue("amount", props.transaction.source_amount)
+					setValue("note", props.transaction.note)
+					break
+				}
+			}
 		}
 	}, [props.transaction])
 
 	const onSubmit = (data) => {
-		console.log(data)
-
 		if (isNew) {
-			dispatch(
-				transactionsStore.actions.create({
-					_type: data.type,
-					wallet_id: data.wallet_id,
-					amount: data.amount,
-					currency: Currency.HUF,
-					timestamp: new Date(data.timestamp).toISOString(),
-					category_id: data.category_id,
-					note: data.note,
-					location: data.location,
-					tags: data.tags.split(","),
-				}),
-			)
-
-			resetForm()
+			switch (type) {
+				case "income": {
+					dispatch(
+						transactionsStore.actions.create({
+							_type: type,
+							wallet_id: data.wallet_id,
+							amount: data.amount,
+							currency: Currency.HUF,
+							timestamp: new Date(data.timestamp).toISOString(),
+							category_id: data.category_id,
+							note: data.note,
+							location: data.location,
+							tags: data.tags.split(","),
+						}),
+					)
+					break
+				}
+				case "expense": {
+					dispatch(
+						transactionsStore.actions.create({
+							_type: type,
+							wallet_id: data.wallet_id,
+							amount: data.amount,
+							currency: Currency.HUF,
+							timestamp: new Date(data.timestamp).toISOString(),
+							category_id: data.category_id,
+							note: data.note,
+							location: data.location,
+							tags: data.tags.split(","),
+						}),
+					)
+					break
+				}
+				case "transfer": {
+					dispatch(
+						transactionsStore.actions.create({
+							_type: type,
+							source_wallet_id: data.source_wallet_id,
+							source_amount: data.amount,
+							source_currency: Currency.HUF,
+							target_wallet_id: data.target_wallet_id,
+							target_amount: data.amount,
+							target_currency: Currency.HUF,
+							timestamp: new Date(data.timestamp).toISOString(),
+							note: data.note,
+						}),
+					)
+					break
+				}
+			}
 		} else {
-			dispatch(
-				transactionsStore.actions.update({
-					id: props.transaction.id,
-					_type: data.type,
-					wallet_id: data.wallet_id,
-					amount: data.amount,
-					currency: Currency.HUF,
-					timestamp: new Date(data.timestamp).toISOString(),
-					category_id: data.category_id,
-					note: data.note,
-					location: data.location,
-					tags: data.tags.split(","),
-				}),
-			)
-
-			// props.onCloseClick()
-			resetForm()
+			switch (type) {
+				case "income": {
+					dispatch(
+						transactionsStore.actions.update({
+							_type: type,
+							id: props.transaction.id,
+							wallet_id: data.wallet_id,
+							amount: data.amount,
+							currency: Currency.HUF,
+							timestamp: new Date(data.timestamp).toISOString(),
+							category_id: data.category_id,
+							note: data.note,
+							location: data.location,
+							tags: data.tags.split(","),
+						}),
+					)
+					break
+				}
+				case "expense": {
+					dispatch(
+						transactionsStore.actions.update({
+							_type: type,
+							id: props.transaction.id,
+							wallet_id: data.wallet_id,
+							amount: data.amount,
+							currency: Currency.HUF,
+							timestamp: new Date(data.timestamp).toISOString(),
+							category_id: data.category_id,
+							note: data.note,
+							location: data.location,
+							tags: data.tags.split(","),
+						}),
+					)
+					break
+				}
+				case "transfer": {
+					dispatch(
+						transactionsStore.actions.update({
+							_type: type,
+							id: props.transaction.id,
+							timestamp: new Date(data.timestamp).toISOString(),
+							source_wallet_id: data.source_wallet_id,
+							source_amount: data.amount,
+							target_wallet_id: data.target_wallet_id,
+							target_amount: data.amount,
+							note: data.note,
+						}),
+					)
+					break
+				}
+			}
 		}
 	}
 
@@ -125,6 +224,8 @@ export default (props: Props) => {
 	}
 
 	const resetForm = () => {
+		setType(null)
+
 		reset()
 	}
 
@@ -144,86 +245,136 @@ export default (props: Props) => {
 				</Flex>
 				<Box px="6" py="4" flexGrow="1" overflowY="auto">
 					<Stack spacing="6">
-						<FormControl isRequired>
-							<FormLabel>Type</FormLabel>
-							<Controller
-								name="type"
-								control={control}
-								render={({ field }) => (
-									<SelectWithIcon
-										id="type"
-										isFilterable={false}
-										isDisabled={!isNew}
-										items={getTypeOptions()}
-										icon={(item) => <CategoryIcon colorHex={item.colorHex} iconFa={item.iconFa} mr="0" />}
-										onChange={field.onChange}
-										selected={field.value}
-									/>
-								)}
-							/>
-						</FormControl>
+						{isNew && (
+							<FormControl isRequired>
+								<FormLabel>Type</FormLabel>
+								<SelectWithIcon
+									id="type"
+									isFilterable={false}
+									isDisabled={!isNew}
+									items={getTypeOptions()}
+									icon={(item) => <CategoryIcon colorHex={item.colorHex} iconFa={item.iconFa} mr="0" />}
+									onChange={(value) => setType(value)}
+									selected={type}
+								/>
+							</FormControl>
+						)}
 
-						<FormControl id="timestamp" isRequired>
-							<FormLabel>Timestamp</FormLabel>
-							<Input {...register("timestamp")} type="date" />
-						</FormControl>
+						{["income", "expense", "transfer"].includes(type) && (
+							<FormControl id="timestamp" isRequired>
+								<FormLabel>Timestamp</FormLabel>
+								<Input {...register("timestamp")} type="date" />
+							</FormControl>
+						)}
 
-						<FormControl isRequired>
-							<FormLabel>Wallet</FormLabel>
-							<Controller
-								name="wallet_id"
-								control={control}
-								render={({ field }) => (
-									<SelectWithIcon
-										id="wallet_id"
-										isFilterable={true}
-										items={wallets}
-										icon={(item) => <Avatar name={item.name} src={item.icon_url} size="sm" />}
-										onChange={field.onChange}
-										selected={field.value}
-									/>
-								)}
-							/>
-						</FormControl>
+						{["income", "expense"].includes(type) && (
+							<FormControl isRequired>
+								<FormLabel>Wallet</FormLabel>
+								<Controller
+									name="wallet_id"
+									control={control}
+									render={({ field }) => (
+										<SelectWithIcon
+											id="wallet_id"
+											isFilterable={true}
+											items={wallets}
+											icon={(item) => <Avatar name={item.name} src={item.icon_url} size="sm" />}
+											onChange={field.onChange}
+											selected={field.value}
+										/>
+									)}
+								/>
+							</FormControl>
+						)}
 
-						<FormControl isRequired>
-							<FormLabel>Category</FormLabel>
-							<Controller
-								name="category_id"
-								control={control}
-								render={({ field }) => (
-									<SelectWithIcon
-										id="category_id"
-										isFilterable={true}
-										items={categories}
-										icon={(item) => <CategoryIcon colorHex={item.color_hex} iconFa={item.icon_fa} mr="0" />}
-										onChange={field.onChange}
-										selected={field.value}
-									/>
-								)}
-							/>
-						</FormControl>
+						{["transfer"].includes(type) && (
+							<FormControl isRequired>
+								<FormLabel>Source Wallet</FormLabel>
+								<Controller
+									name="source_wallet_id"
+									control={control}
+									render={({ field }) => (
+										<SelectWithIcon
+											id="source_wallet_id"
+											isFilterable={true}
+											items={wallets}
+											icon={(item) => <Avatar name={item.name} src={item.icon_url} size="sm" />}
+											onChange={field.onChange}
+											selected={field.value}
+										/>
+									)}
+								/>
+							</FormControl>
+						)}
 
-						<FormControl id="amount" isRequired>
-							<FormLabel>Amount</FormLabel>
-							<Input {...register("amount")} type="number" />
-						</FormControl>
+						{["transfer"].includes(type) && (
+							<FormControl isRequired>
+								<FormLabel>Target Wallet</FormLabel>
+								<Controller
+									name="target_wallet_id"
+									control={control}
+									render={({ field }) => (
+										<SelectWithIcon
+											id="target_wallet_id"
+											isFilterable={true}
+											items={wallets}
+											icon={(item) => <Avatar name={item.name} src={item.icon_url} size="sm" />}
+											onChange={field.onChange}
+											selected={field.value}
+										/>
+									)}
+								/>
+							</FormControl>
+						)}
 
-						<FormControl id="location">
-							<FormLabel>Location</FormLabel>
-							<Input {...register("location")} type="input" />
-						</FormControl>
+						{["income", "expense"].includes(type) && (
+							<FormControl isRequired>
+								<FormLabel>Category</FormLabel>
+								<Controller
+									name="category_id"
+									control={control}
+									render={({ field }) => (
+										<SelectWithIcon
+											id="category_id"
+											isFilterable={true}
+											items={categories}
+											icon={(item) => <CategoryIcon colorHex={item.color_hex} iconFa={item.icon_fa} mr="0" />}
+											onChange={field.onChange}
+											selected={field.value}
+										/>
+									)}
+								/>
+							</FormControl>
+						)}
 
-						<FormControl id="note">
-							<FormLabel>Note</FormLabel>
-							<Textarea {...register("note")} />
-						</FormControl>
+						{["income", "expense", "transfer"].includes(type) && (
+							<FormControl id="amount" isRequired>
+								<FormLabel>Amount</FormLabel>
+								<Input {...register("amount")} type="number" />
+							</FormControl>
+						)}
 
-						<FormControl id="tags">
-							<FormLabel>Tags</FormLabel>
-							<Input {...register("tags")} type="input" />
-							<FormHelperText>Seperate values by comma</FormHelperText>
-						</FormControl>
+						{["income", "expense"].includes(type) && (
+							<FormControl id="location">
+								<FormLabel>Location</FormLabel>
+								<Input {...register("location")} type="input" />
+							</FormControl>
+						)}
+
+						{["income", "expense", "transfer"].includes(type) && (
+							<FormControl id="note">
+								<FormLabel>Note</FormLabel>
+								<Textarea {...register("note")} />
+							</FormControl>
+						)}
+
+						{["income", "expense"].includes(type) && (
+							<FormControl id="tags">
+								<FormLabel>Tags</FormLabel>
+								<Input {...register("tags")} type="input" />
+								<FormHelperText>Seperate values by comma</FormHelperText>
+							</FormControl>
+						)}
 					</Stack>
 
 					{!isNew && (
