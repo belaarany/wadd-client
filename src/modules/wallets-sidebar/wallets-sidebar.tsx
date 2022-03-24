@@ -3,6 +3,7 @@ import { walletsStore } from "@wadd/redux/features"
 import { useAppDispatch, useAppSelector } from "@wadd/redux/store"
 import { useApiState } from "@wadd/utils/useApiState"
 import Color from "color"
+import React from "react"
 
 export default () => {
 	const dispatch = useAppDispatch()
@@ -11,7 +12,7 @@ export default () => {
 	const walletsApiState = useApiState("wallets")
 
 	return (
-		<Box w="300px" p="8" borderRight="1px" borderRightColor="gray.200">
+		<React.Fragment>
 			<Box
 				py="3"
 				px="4"
@@ -99,6 +100,6 @@ export default () => {
 					</Flex>
 				</Box>
 			))}
-		</Box>
+		</React.Fragment>
 	)
 }

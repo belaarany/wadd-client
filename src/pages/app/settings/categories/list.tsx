@@ -36,7 +36,7 @@ export default () => {
 	return (
 		<>
 			<Container maxW="container.lg">
-				<Card header="Income Categories" action={<Button colorScheme="brand" onClick={onAddCategoryClick}>Add Category</Button>}>
+				<Card header="Categories" action={<Button colorScheme="brand" onClick={onAddCategoryClick}>Add Category</Button>}>
 					<Table>
 						<Thead>
 							<Tr>

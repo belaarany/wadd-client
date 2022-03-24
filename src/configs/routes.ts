@@ -12,7 +12,7 @@ export const routes = {
 		},
 		{
 			label: "Savings",
-			icon: "fad fa-sack-dollar",
+			icon: "fad fa-bullseye-arrow",
 			path: "/app/savings",
 		},
 	],

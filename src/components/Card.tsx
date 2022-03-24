@@ -1,6 +1,6 @@
 import { Avatar, Box, Button, Center, Container, Flex, Heading, IconButton, Menu, MenuButton, MenuItem, MenuList, Spacer, Table, Tag, Tbody, Td, Th, Thead, Tr, useDisclosure, useToast } from "@chakra-ui/react"
 
-export default ({ header, action, children }: any) => {
+export default ({ header, action, children, ...rest }: any) => {
 	return (
 		<Box w="full">
 			{(header || action) && (
