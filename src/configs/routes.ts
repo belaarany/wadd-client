@@ -5,16 +5,16 @@ export const routes = {
 			icon: "fad fa-exchange",
 			path: "/app/transactions",
 		},
-		{
-			label: "Analytics",
-			icon: "fad fa-analytics",
-			path: "/app/analytics",
-		},
-		{
-			label: "Savings",
-			icon: "fad fa-bullseye-arrow",
-			path: "/app/savings",
-		},
+		// {
+		// 	label: "Analytics",
+		// 	icon: "fad fa-analytics",
+		// 	path: "/app/analytics",
+		// },
+		// {
+		// 	label: "Savings",
+		// 	icon: "fad fa-bullseye-arrow",
+		// 	path: "/app/savings",
+		// },
 	],
 	secondary: [
 		{
